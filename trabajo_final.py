@@ -1,4 +1,5 @@
 import autoencoder
+import training
 import os
 import json
 import torch
@@ -42,7 +43,7 @@ def train_configuration(config, t_dataset, v_dataset):
     valid_loader = torch.utils.data.DataLoader(v_dataset, batch_size=batch_size, shuffle=True, num_workers=os.cpu_count()-1)
 
     # Se entrena el modelo
-    train_loss_incorrect, train_loss, valid_loss = autoencoder.train_model(model, train_loader, valid_loader, optimizer, criterion, epochs)
+    train_loss_incorrect, train_loss, valid_loss = training.train_model(model, train_loader, valid_loader, optimizer, criterion, epochs)
 
     return model, train_loss_incorrect, train_loss, valid_loss
 
@@ -63,13 +64,7 @@ def train_all(configs, t_dataset, v_dataset):
         },
         ...
     ] 
-
-    Retorna una lista de tuplas con la forma:
-    [
-        (modelo_1, train_loss_incorrect_1, train_loss_1, valid_loss_1),
-        (modelo_2, train_loss_incorrect_2, train_loss_2, valid_loss_2),
-        ...
-    ]
+    Guarda los resultados en archivos .json y los modelos en archivos .pt
     """
     results = {}
     for i,(config) in enumerate(configs):
@@ -86,48 +81,31 @@ def train_all(configs, t_dataset, v_dataset):
         with open(f'./results/result_{id}.json', 'w') as f:
             json.dump(results, f)
             
-
-    """ { # configuracion default
-        "id": 0,
-        "learning_rate": 0.001,
-        "dropout": 0.2,
-        "batch_size": 100,
-        "epochs": 50,
-        "lineal": True
-    },
+configurations = [
     {
         "id": 1,
         "learning_rate": 0.001,
         "dropout": 0.2,
-        "batch_size": 64,
+        "l_size": 16*12*12, # full connected desp del encoder
+        "batch_size": 100,
         "epochs": 50,
-        "lineal": True
     },
     {
         "id": 2,
-        "learning_rate": 0.001,
-        "dropout": 0.2,
-        "batch_size": 16,
-        "epochs": 50,
-        "lineal": True
-    }, """
-configurations = [
-    {
-        "id": 3,
         "learning_rate": 0.01,
         "dropout": 0.2,
+        "l_size": 16*12*12, # full connected desp del encoder
         "batch_size": 100,
         "epochs": 50,
-        "lineal": True
     },
     {
-        "id": 4,
+        "id": 3,
         "learning_rate": 0.001,
         "dropout": 0.2,
+        "l_size": 128,
         "batch_size": 100,
         "epochs": 50,
-        "lineal": False
-    }
+    },
 ]
 
 # Define a transform to normalize the data
