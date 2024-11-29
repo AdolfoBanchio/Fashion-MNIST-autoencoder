@@ -54,6 +54,7 @@ def train_all(configs, t_dataset, v_dataset):
     La función recibe una lista de diccionarios con las configuraciones de los autoencoders de la forma:
     [
         {
+            "name": str,
             "learning_rate": float,
             "dropout": float,
             "batch_size": int,
@@ -74,18 +75,20 @@ def train_all(configs, t_dataset, v_dataset):
     for i,(config) in enumerate(configs):
         model, train_loss_incorrect, train_loss, valid_loss = train_configuration(config, t_dataset, v_dataset)
         results = {
-            "config_"+str(i): config,
-            "model_"+str(i): model,
+            config["name"]: config,
             "train_loss_incorrect_"+str(i): train_loss_incorrect,
             "train_loss_"+str(i): train_loss,
             "valid_loss_"+str(i): valid_loss
         }
+        # save the state dict of the model
+        torch.save(model.state_dict(), f'./results/model_{i}.pt')
         with open(f'./results/result_{i}.json', 'w') as f:
             json.dump(results, f)
             
 
 configurations = [
     { # configuracion default
+        "id": 0,
         "learning_rate": 0.001,
         "dropout": 0.2,
         "batch_size": 100,
@@ -93,6 +96,7 @@ configurations = [
         "lineal": True
     },
     {
+        "id": 1,
         "learning_rate": 0.001,
         "dropout": 0.2,
         "batch_size": 64,
@@ -100,6 +104,7 @@ configurations = [
         "lineal": True
     },
     {
+        "id": 2,
         "learning_rate": 0.001,
         "dropout": 0.2,
         "batch_size": 16,
@@ -107,9 +112,10 @@ configurations = [
         "lineal": True
     },
     {
+        "id": 3,
         "learning_rate": 0.001,
         "dropout": 0.2,
-        "batch_size": 64,
+        "batch_size": 100,
         "epochs": 50,
         "lineal": False
     }, 
