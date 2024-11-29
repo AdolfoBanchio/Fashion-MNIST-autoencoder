@@ -1,0 +1,1 @@
+{"config_1": {"id": 1, "learning_rate": 0.001, "dropout": 0.2, "l_size": 2304, "batch_size": 100, "epochs": 1, "lineal": true}, "train_loss_incorrect_1": [0.7028252982099851], "train_loss_1": [0.6968883114059766], "valid_loss_1": [0.693869754076004]}
