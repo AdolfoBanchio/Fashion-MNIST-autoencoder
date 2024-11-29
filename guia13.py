@@ -74,20 +74,20 @@ def train_all(configs, t_dataset, v_dataset):
     results = {}
     for i,(config) in enumerate(configs):
         model, train_loss_incorrect, train_loss, valid_loss = train_configuration(config, t_dataset, v_dataset)
+        id = config["id"]
         results = {
-            config["name"]: config,
-            "train_loss_incorrect_"+str(i): train_loss_incorrect,
-            "train_loss_"+str(i): train_loss,
-            "valid_loss_"+str(i): valid_loss
+            f"config_{id}": config,
+            "train_loss_incorrect_"+str(id): train_loss_incorrect,
+            "train_loss_"+str(id): train_loss,
+            "valid_loss_"+str(id): valid_loss
         }
         # save the state dict of the model
-        torch.save(model.state_dict(), f'./results/model_{i}.pt')
-        with open(f'./results/result_{i}.json', 'w') as f:
+        torch.save(model.state_dict(), f'./results/model_{id}.pt')
+        with open(f'./results/result_{id}.json', 'w') as f:
             json.dump(results, f)
             
 
-configurations = [
-    { # configuracion default
+    """ { # configuracion default
         "id": 0,
         "learning_rate": 0.001,
         "dropout": 0.2,
@@ -110,15 +110,24 @@ configurations = [
         "batch_size": 16,
         "epochs": 50,
         "lineal": True
-    },
+    }, """
+configurations = [
     {
         "id": 3,
+        "learning_rate": 0.01,
+        "dropout": 0.2,
+        "batch_size": 100,
+        "epochs": 50,
+        "lineal": True
+    },
+    {
+        "id": 4,
         "learning_rate": 0.001,
         "dropout": 0.2,
         "batch_size": 100,
         "epochs": 50,
         "lineal": False
-    }, 
+    }
 ]
 
 # Define a transform to normalize the data

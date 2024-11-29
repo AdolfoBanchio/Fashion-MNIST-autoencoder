@@ -55,7 +55,7 @@ class Autoencoder(nn.Module):
 
 class Autoencoder_no_lineal(nn.Module):
     def __init__(self, dropout):
-        super(Autoencoder_no_lienal, self).__init__()
+        super(Autoencoder_no_lineal, self).__init__()
         self.encoder = nn.Sequential(
             #nn.Flatten(),
             nn.Conv2d(1, 16, kernel_size=3, padding=0), # (1, 28, 28) -> (16, 26, 26)
@@ -79,7 +79,6 @@ def train_one_epoch(model, train_loader, optimizer, criterion):
   model.train() # Se pone el modelo en modo de entrenamiento
   sum_batch_avg_loss = 0 # Inicializamos la suma de las pérdidas promedio de los batches
 
-  num_processed_examples = 0 # Inicializamos la cantidad de ejemplos procesados
   for batch_number, (images, labels) in enumerate(train_loader):
       device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -99,9 +98,6 @@ def train_one_epoch(model, train_loader, optimizer, criterion):
       # Calculamos la perdida promedio del batch y lo agregamos a la suma total
       batch_avg_loss = loss.item() 
       sum_batch_avg_loss += batch_avg_loss
-      
-      # Calculamos la cantidad total de predicciones procesadas
-      num_processed_examples += batch_size
       
   # Calculamos la perdida promedio de todos los batches
   avg_loss = sum_batch_avg_loss / len(train_loader)
