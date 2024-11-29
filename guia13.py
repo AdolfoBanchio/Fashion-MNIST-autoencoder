@@ -73,29 +73,16 @@ def train_all(configs, t_dataset, v_dataset):
     results = {}
     for i,(config) in enumerate(configs):
         model, train_loss_incorrect, train_loss, valid_loss = train_configuration(config, t_dataset, v_dataset)
-        results[f"config_{i}"] = (model, train_loss_incorrect, train_loss, valid_loss)
-    return results
-
-def save_results(results):
-    """  
-    Guarda un archivo JSON con los resultados en path
-
-    Recive un diccionario de diccionarios con los resultados de la forma:
-    {
-        "config_0": (modelo_0, train_loss_incorrect_0, train_loss_0, valid_loss_0),
-        "config_1": (modelo_1, train_loss_incorrect_1, train_loss_1, valid_loss_1),
-    """
-
-    for result in results:
-        to_save = {
-            "model": results[result][0].state_dict(),
-            "train_loss_incorrect": results[result][1],
-            "train_loss": results[result][2],
-            "valid_loss": results[result][3]
+        results = {
+            "config_"+str(i): config,
+            "model_"+str(i): model,
+            "train_loss_incorrect_"+str(i): train_loss_incorrect,
+            "train_loss_"+str(i): train_loss,
+            "valid_loss_"+str(i): valid_loss
         }
-        with open(f'./results/{result}.json', 'w') as f:
-            json.dump(to_save, f)
-
+        with open(f'./results/result_{i}.json', 'w') as f:
+            json.dump(results, f)
+            
 
 configurations = [
     { # configuracion default
@@ -138,5 +125,4 @@ valid_set_orig = datasets.FashionMNIST('MNIST_data/', download = True, train = F
 train_set_autoencoder = autoencoder.CustomDataset(train_set_orig)
 valid_set_autoencoder = autoencoder.CustomDataset(valid_set_orig)
 
-results = train_all(configurations, train_set_autoencoder, valid_set_autoencoder)
-save_results(results)
+train_all(configurations, train_set_autoencoder, valid_set_autoencoder)
