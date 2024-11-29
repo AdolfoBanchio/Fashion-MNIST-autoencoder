@@ -20,24 +20,24 @@ class Autoencoder(nn.Module):
     def __init__(self, dropout, l_size):
         super(Autoencoder, self).__init__()
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=3, padding=0), # (1, 28, 28) -> (16, 26, 26)
+            nn.Conv2d(1, 16, kernel_size=3, padding=0),  # (1, 28, 28) -> (16, 26, 26)
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.Conv2d(16, 16, kernel_size=3, padding=0), # (16, 26, 26) -> (16, 24, 24)
+            nn.Conv2d(16, 32, kernel_size=3, padding=0),  # (16, 26, 26) -> (32, 24, 24)
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.MaxPool2d(2,2), # (16, 24, 24) -> (16, 12, 12)
+            nn.MaxPool2d(2, 2),  # (32, 24, 24) -> (32, 12, 12)
             nn.Flatten(),
-            nn.Linear(16*12*12, l_size), # FULLY CONNECTED
-            nn.ReLu()
+            nn.Linear(32 * 12 * 12, l_size),  # FULLY CONNECTED
+            nn.ReLU()
         )
         self.decoder = nn.Sequential(
-            nn.Linear(l_size, 16*12*12), # FULLY CONNECTED
-            nn.ReLu(),
-            nn.Unflatten(1, (16, 12, 12)),
-            nn.ConvTranspose2d(16, 16, kernel_size=3, stride=2, padding=1), # (16, 12, 12) -> (16, 24, 24)
+            nn.Linear(l_size, 32 * 12 * 12),  # FULLY CONNECTED
             nn.ReLU(),
-            nn.ConvTranspose2d(16, 1, kernel_size=3, stride=2, padding=1), # (16, 24, 24) -> (1, 28, 28)
+            nn.Unflatten(1, (32, 12, 12)),
+            nn.ConvTranspose2d(32, 16, kernel_size=4, stride=2, padding=1),  # (32, 12, 12) -> (16, 24, 24)
+            nn.ReLU(),
+            nn.ConvTranspose2d(16, 1, kernel_size=5, stride=1, padding=0),  # (16, 24, 24) -> (1, 28, 28)
             nn.Sigmoid()
         )
 
@@ -53,15 +53,15 @@ class Autoencoder_no_lineal(nn.Module):
             nn.Conv2d(1, 16, kernel_size=3, padding=0), # (1, 28, 28) -> (16, 26, 26)
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.Conv2d(16, 16, kernel_size=3, padding=0), # (16, 26, 26) -> (16, 24, 24)
+            nn.Conv2d(16, 32, kernel_size=3, padding=0), # (16, 26, 26) -> (16, 24, 24)
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.MaxPool2d(2,2) # (16, 24, 24) -> (16, 12, 12)
+            nn.MaxPool2d(2,2) # (32, 24, 24) -> (32, 12, 12)
         )
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(16, 16, kernel_size=3, stride=2, padding=1), # (16, 12, 12) -> (16, 24, 24)
+            nn.ConvTranspose2d(32, 16, kernel_size=2, stride=2, padding=0), # (16, 12, 12) -> (16, 24, 24)
             nn.ReLU(),
-            nn.ConvTranspose2d(16, 1, kernel_size=3, stride=2, padding=1), # (16, 24, 24) -> (1, 28, 28)
+            nn.ConvTranspose2d(16, 1, kernel_size=5, stride=1, padding=0),  # (16, 24, 24) -> (1, 28, 28)
             nn.Sigmoid()
         )
 

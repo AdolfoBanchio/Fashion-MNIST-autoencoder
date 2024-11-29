@@ -20,6 +20,7 @@ def train_configuration(config, t_dataset, v_dataset):
     """
     lr = config["learning_rate"]
     dropout = config["dropout"]
+    l_size = config["l_size"]
     batch_size = config["batch_size"]
     epochs = config["epochs"]
 
@@ -29,7 +30,7 @@ def train_configuration(config, t_dataset, v_dataset):
     if not config["lineal"]:
         model = autoencoder.Autoencoder_no_lineal(dropout)
     else:
-        model = autoencoder.Autoencoder(dropout)
+        model = autoencoder.Autoencoder(dropout, l_size=l_size)
 
     # Se envía el modelo al dispositivo
     model.to(device)
@@ -88,7 +89,8 @@ configurations = [
         "dropout": 0.2,
         "l_size": 16*12*12, # full connected desp del encoder
         "batch_size": 100,
-        "epochs": 50,
+        "epochs": 1,
+        "lineal": True
     },
     {
         "id": 2,
@@ -97,14 +99,25 @@ configurations = [
         "l_size": 16*12*12, # full connected desp del encoder
         "batch_size": 100,
         "epochs": 50,
+        "lineal": True
     },
     {
         "id": 3,
+        "learning_rate": 0.01,
+        "dropout": 0.2,
+        "l_size": 16*12*12, # full connected desp del encoder
+        "batch_size": 100,
+        "epochs": 50,
+        "lineal": False
+    },
+    {
+        "id": 4,
         "learning_rate": 0.001,
         "dropout": 0.2,
         "l_size": 128,
         "batch_size": 100,
         "epochs": 50,
+        "lineal": True
     },
 ]
 
