@@ -4,3 +4,9 @@ __pycache__/
 *$py.class
 
 test.py
+
+# vscode 
+.vscode/
+
+tf-2024.pdf
+
