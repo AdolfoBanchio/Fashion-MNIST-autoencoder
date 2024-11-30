@@ -22,19 +22,21 @@ def read_results():
         for i, (data) in enumerate(files):
             with open(f'./results/{data}', 'r') as f:
                 data = json.load(f)
-                config = data[f'config_{i+1}']
-                train_loss_inc = data[f'train_loss_incorrect_{i+1}']
-                train_loss = data[f'train_loss_{i+1}']    
-                valid_loss = data[f'valid_loss_{i+1}']
+                keys = list(data.keys())
+                config = data[keys[0]]
+                id = config['id']
+                train_loss_inc = data[f'train_loss_incorrect_{id}']
+                train_loss = data[f'train_loss_{id}']    
+                valid_loss = data[f'valid_loss_{id}']
 
-            save_plot(config,train_loss_inc,train_loss,valid_loss, f'configuracion{i}')
+            save_plot(config,train_loss_inc,train_loss,valid_loss, f'configuracion{id}')
             print(i)
             # wirte the configuration and the plot in a markdown file
-            md_file.write(f'# Configuración {i}\n\n')
+            md_file.write(f'# Configuración {id}\n\n')
             md_file.write(f'```json\n')
             md_file.write(json.dumps(config, indent=4))
             md_file.write(f'\n```\n\n')
-            md_file.write(f'![](./configuracion{i}.png)\n\n')
+            md_file.write(f'![](./configuracion{id}.png)\n\n')
             # wirte last values of the losses
             md_file.write(f'Pérdida de entrenamiento incorrecto: {train_loss_inc[-1]}\n\n')
             md_file.write(f'Pérdida de entrenamiento: {train_loss[-1]}\n\n')

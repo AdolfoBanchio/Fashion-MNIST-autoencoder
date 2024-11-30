@@ -2,87 +2,115 @@ import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+import os
+import json
+import autoencoder
 
+class AutoencoderTrainer:
+    def __init__(self, model, train_loader, valid_loader, optimizer, criterion, epochs):
+      self.model = model
+      self.train_loader = train_loader
+      self.valid_loader = valid_loader
+      self.optimizer = optimizer
+      self.criterion = criterion
+      self.epochs = epochs
+      self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def train_loop(model, train_loader, optimizer, criterion):
-  model.train() # Se pone el modelo en modo de entrenamiento
-  sum_batch_avg_loss = 0 # Inicializamos la suma de las pérdidas promedio de los batches
+      self.train_loss_incorrect = []
+      self.train_loss = []
+      self.valid_loss = []
 
-  for batch_number, (images, labels) in enumerate(train_loader):
-      device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    def train_loop(self):
+      self.model.train()
+      running_loss = 0
 
-      images = images.to(device) # Se envía la imagen al dispositivo
-      labels = labels.to(device) # Se envía la etiqueta al dispositivo
+      for batch_number, (images, labels) in enumerate(self.train_loader):
 
-      batch_size = len(images) # Se obtiene el tamaño del lote
-      # Se obtiene la predicción del modelo y se calcula la pérdida 
-      pred = model(images)
-      loss = criterion(pred, labels)
-      
-      # Backpropagation usando el optimizador 
-      optimizer.zero_grad()
-      loss.backward()
-      optimizer.step()
-      
-      # Calculamos la perdida promedio del batch y lo agregamos a la suma total
-      batch_avg_loss = loss.item() 
-      sum_batch_avg_loss += batch_avg_loss
-      
-  # Calculamos la perdida promedio de todos los batches
-  avg_loss = sum_batch_avg_loss / len(train_loader)
-  # Calculamos la precisión del modelo
-  return avg_loss
+        images = images.to(self.device)
+        labels = labels.to(self.device)
 
+        pred = self.model(images)
+        loss = self.criterion(pred, labels)
 
-def validation_loop(model, valid_loader, criterion):
-    model.eval() # Se pone el modelo en modo de evaluación
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
 
-    sum_batch_avg_loss = 0 # Inicializamos la suma de las pérdidas promedio de los batches
-    num_processed_examples = 0 # Inicializamos la cantidad de ejemplos procesados
-
-    for batch_number, (images, labels) in enumerate(valid_loader):
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-        images = images.to(device) # Se envía la imagen al dispositivo
-        labels = labels.to(device) # Se envía la etiqueta al dispositivo
-      
-        batch_size = len(images)
-
-        # Se obtiene la predicción del modelo y se calcula la pérdida
-        pred = model(images)
-        loss = criterion(pred, labels)
-
-        # Calculamos la perdida promedio del batch y lo agregamos a la suma total
-        batch_avg_loss = loss.item()
-        sum_batch_avg_loss += batch_avg_loss
+        running_loss += loss.item()
         
-        # Calculamos la cantidad total de predicciones procesadas
-        num_processed_examples += batch_size
-
-    # Calculamos la perdida promedio de todos los batches
-    avg_loss = sum_batch_avg_loss / len(valid_loader)
-    # Calculamos la precisión del modelo
-
-    return avg_loss
+      avg_loss = running_loss / len(self.train_loader)
+      return avg_loss
 
 
-def train_model(model, train_loader, valid_loader, optimizer, criterion, epochs):
-  train_loss_incorrect = []
-  train_loss = []
+    def validation_loop(self, loader):
+      self.model.eval()
+      running_loss = 0
+      num_batches = len(loader)
+
+      with torch.no_grad():
+            for X, Y in loader:
+                X = X.to(self.device)
+                Y = Y.to(self.device)
+                pred = self.model(X)
+                loss = self.criterion(pred, Y)
+
+                running_loss += loss.item()
+
+      avg_loss = running_loss / num_batches
+      return avg_loss
+
+
+    def train_model(self):
+      for _ in tqdm(range(self.epochs)):
+        self.train_loss_incorrect.append(self.train_loop())
+        self.train_loss.append(self.validation_loop(self.train_loader))
+        self.valid_loss.append(self.validation_loop(self.valid_loader))
+
+      return self.train_loss_incorrect, self.train_loss, self.valid_loss
+    
   
-  valid_loss = []
-  for epoch in tqdm(range(epochs)):
+class TrainingManager:
+    def __init__(self, configs, t_dataset, v_dataset):
+      self.configs = configs
+      self.t_dataset = t_dataset
+      self.v_dataset = v_dataset
 
-    # train one epoch
-    train_entropy_inc = train_loop(model, train_loader, optimizer, criterion)
-    train_loss_incorrect.append(train_entropy_inc)
+    def train_configuration(self, config):
+      lr = config["learning_rate"]
+      dropout = config["dropout"]
+      l_size = config["l_size"]
+      batch_size = config["batch_size"]
+      epochs = config["epochs"]
 
-    # check avg loss and accuracy for incorrect predictions
-    train_entropy = validation_loop(model, train_loader, criterion)
-    train_loss.append(train_entropy)
+      if not config["lineal"]:
+        model = autoencoder.Autoencoder_no_lineal(dropout)
+      else:
+        model = autoencoder.Autoencoder(dropout, l_size=l_size)
 
-    # validate the epoch
-    valid_entropy = validation_loop(model, valid_loader, criterion)
-    valid_loss.append(valid_entropy)
+      optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+      criterion = torch.nn.MSELoss()
 
-  return train_loss_incorrect, train_loss, valid_loss
+      train_loader = torch.utils.data.DataLoader(self.t_dataset, batch_size=batch_size, shuffle=True, num_workers=os.cpu_count()-1)
+      valid_loader = torch.utils.data.DataLoader(self.v_dataset, batch_size=batch_size, shuffle=True, num_workers=os.cpu_count()-1)
+
+
+      trainer = AutoencoderTrainer(model, train_loader, valid_loader, optimizer, criterion, epochs)
+
+      train_loss_incorrect, train_loss, valid_loss = trainer.train_model()
+
+      return model, train_loss_incorrect, train_loss, valid_loss
+    
+    def train_all(self):
+      results = {}
+      for config in self.configs:
+        model, train_loss_incorrect, train_loss, valid_loss = self.train_configuration(config)
+        id = config["id"]
+        results = {
+          f"config_{id}": config,
+          "train_loss_incorrect_"+str(id): train_loss_incorrect,
+          "train_loss_"+str(id): train_loss,
+          "valid_loss_"+str(id): valid_loss
+        }
+        torch.save(model.state_dict(), f'./results/model_{id}.pt')
+        with open(f'./results/result_{id}.json', 'w') as f:
+          json.dump(results, f)
