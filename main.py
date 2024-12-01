@@ -1,10 +1,10 @@
 import autoencoder
-import training
+import autoencoder_trainer
 import os
 import json
 import torch
 from torchvision import datasets, transforms  
-from training import AutoencoderTrainer, TrainingManager
+from autoencoder_trainer import AutoencoderTrainer, TrainingManager
  
 """ 
     {

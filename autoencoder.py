@@ -19,6 +19,8 @@ class CustomDataset(Dataset):
 class Autoencoder(nn.Module):
     def __init__(self, dropout, l_size):
         super(Autoencoder, self).__init__()
+        self.dropout = dropout
+        self.l_size = l_size
         # Encoder
         self.encoder = nn.Sequential(
             nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1),  # (1, 28, 28) -> (32, 28, 28)

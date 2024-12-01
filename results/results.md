@@ -42,6 +42,28 @@ Pérdida de entrenamiento: 0.008588632261380553
 
 Pérdida de validación: 0.00894775432534516
 
+# Configuración 3
+
+```json
+{
+    "id": 3,
+    "learning_rate": 0.001,
+    "dropout": 0.2,
+    "l_size": 1024,
+    "batch_size": 100,
+    "epochs": 60,
+    "lineal": true
+}
+```
+
+![](./configuracion3.png)
+
+Pérdida de entrenamiento incorrecto: 0.008950487502540152
+
+Pérdida de entrenamiento: 0.007686808056508502
+
+Pérdida de validación: 0.008079061871394516
+
 # Configuración 4
 
 ```json
