@@ -76,14 +76,14 @@ best_model.load_state_dict(torch.load("./results/model_3.pt", map_location=torch
 
 """ 
 Entreno 3 clasificadores
-1: Encoder sin pre-entrenamiento
+1: Encoder con pre-entrenamiento, entreno solo la última capa
 2: Encoder con pre-entrenamiento, entreno todas las capas
-3: Encoder con pre-entrenamiento, entreno solo la última capa
+3: Encoder sin pre-entrenamiento
 """
 classifiers = [
-    #Classifier(autoencoder=best_model, num_classes=10),  # 3
+    #Classifier(autoencoder=best_model, num_classes=10),  # 1
     #Classifier(autoencoder=best_model, num_classes=10), # 2
-    Classifier(autoencoder=base_model, num_classes=10) # 1
+    Classifier(autoencoder=base_model, num_classes=10) # 3
 ]
 
 optimizers = [

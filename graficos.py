@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import json
 # get al .json files from ./results folder
 files = os.listdir('./results')
-files = [f for f in files if f.endswith('.json')]
+files = [f for f in files if f.endswith('.json') and not f.startswith('classifier')]
 files.sort()
 
 def save_plot(conf,train_loss_in,train_loss,valid_loss, name):
@@ -14,6 +14,8 @@ def save_plot(conf,train_loss_in,train_loss,valid_loss, name):
     plt.grid()
     plt.title(name)
     plt.legend()
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
     plt.savefig(f'./results/{name}.png')
     plt.close()
 
@@ -29,7 +31,7 @@ def read_results():
                 train_loss = data[f'train_loss']    
                 valid_loss = data[f'valid_loss']
 
-            save_plot(config,train_loss_inc,train_loss,valid_loss, f'configuracion{id}')
+            save_plot(config,train_loss_inc,train_loss,valid_loss, f'configuracion {id}')
             print(i)
             # wirte the configuration and the plot in a markdown file
             md_file.write(f'# Configuración {id}\n\n')
