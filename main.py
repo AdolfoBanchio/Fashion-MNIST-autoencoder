@@ -11,20 +11,47 @@ configurations = [
         "id": 1,
         "learning_rate": 0.001,
         "dropout": 0.2,
-        "l_size": 256, 
+        "l_size": 64,  # Latent size más pequeño
         "batch_size": 100,
-        "epochs": 5,
-        "lineal": False
+        "epochs": 30,
+        "lineal": True
     },
     {
         "id": 2,
         "learning_rate": 0.001,
         "dropout": 0.2,
-        "l_size": 256, 
+        "l_size": 256,  # Latent size intermedio
         "batch_size": 100,
-        "epochs": 5,
+        "epochs": 30,
         "lineal": True
     },
+    {
+        "id": 3,
+        "learning_rate": 0.001,
+        "dropout": 0.2,
+        "l_size": 512,  # Latent size intermedio
+        "batch_size": 100,
+        "epochs": 30,
+        "lineal": True
+    },
+    {
+        "id": 4,
+        "learning_rate": 0.001,
+        "dropout": 0.2,
+        "l_size": 1024,  # Latent size más grande
+        "batch_size": 100,
+        "epochs": 30,
+        "lineal": True
+    },
+    {
+        "id": 5,
+        "learning_rate": 0.001,
+        "dropout": 0.2,
+        "l_size": 128,  # no importa el latent size
+        "batch_size": 100,
+        "epochs": 30,
+        "lineal": False
+    }
 ]
 
 # Define a transform to normalize the data
