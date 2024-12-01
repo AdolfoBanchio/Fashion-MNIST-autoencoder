@@ -25,9 +25,9 @@ def read_results():
                 keys = list(data.keys())
                 config = data[keys[0]]
                 id = config['id']
-                train_loss_inc = data[f'train_loss_incorrect_{id}']
-                train_loss = data[f'train_loss_{id}']    
-                valid_loss = data[f'valid_loss_{id}']
+                train_loss_inc = data[f'train_loss_incorrect']
+                train_loss = data[f'train_loss']    
+                valid_loss = data[f'valid_loss']
 
             save_plot(config,train_loss_inc,train_loss,valid_loss, f'configuracion{id}')
             print(i)
