@@ -6,7 +6,7 @@ import torch
 from torchvision import datasets, transforms  
 from training import AutoencoderTrainer, TrainingManager
  
-configurations = [
+""" 
     {
         "id": 1,
         "learning_rate": 0.001,
@@ -26,15 +26,6 @@ configurations = [
         "lineal": True
     },
     {
-        "id": 3,
-        "learning_rate": 0.001,
-        "dropout": 0.2,
-        "l_size": 1024,  # Latent size más grande
-        "batch_size": 100,
-        "epochs": 60,
-        "lineal": True
-    },
-    {
         "id": 4,
         "learning_rate": 0.001,
         "dropout": 0.2,
@@ -43,6 +34,18 @@ configurations = [
         "epochs": 60,
         "lineal": False
     }
+"""
+
+configurations = [
+    {
+        "id": 3,
+        "learning_rate": 0.001,
+        "dropout": 0.2,
+        "l_size": 1024,  # Latent size más grande
+        "batch_size": 100,
+        "epochs": 60,
+        "lineal": True
+    }, 
 ]
 
 # Define a transform to normalize the data

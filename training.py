@@ -108,8 +108,8 @@ class TrainingManager:
         results = {
           f"config": config,
           "train_loss_incorrect": train_loss_incorrect,
-          "train_loss_": train_loss,
-          "valid_loss_": valid_loss
+          "train_loss": train_loss,
+          "valid_loss": valid_loss
         }
         torch.save(model.state_dict(), f'./results/model_{id}.pt')
         with open(f'./results/result_{id}.json', 'w') as f:

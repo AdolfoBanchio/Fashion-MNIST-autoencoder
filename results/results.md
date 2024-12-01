@@ -7,18 +7,18 @@
     "dropout": 0.2,
     "l_size": 64,
     "batch_size": 100,
-    "epochs": 30,
+    "epochs": 60,
     "lineal": true
 }
 ```
 
 ![](./configuracion1.png)
 
-Pérdida de entrenamiento incorrecto: 0.021038790550082922
+Pérdida de entrenamiento incorrecto: 0.017255655922926962
 
-Pérdida de entrenamiento: 0.02646424128053089
+Pérdida de entrenamiento: 0.022101014222328862
 
-Pérdida de validación: 0.02656679421663284
+Pérdida de validación: 0.02221326269209385
 
 # Configuración 2
 
@@ -27,42 +27,20 @@ Pérdida de validación: 0.02656679421663284
     "id": 2,
     "learning_rate": 0.001,
     "dropout": 0.2,
-    "l_size": 256,
+    "l_size": 512,
     "batch_size": 100,
-    "epochs": 30,
+    "epochs": 60,
     "lineal": true
 }
 ```
 
 ![](./configuracion2.png)
 
-Pérdida de entrenamiento incorrecto: 0.012825770981920262
+Pérdida de entrenamiento incorrecto: 0.010286848434867959
 
-Pérdida de entrenamiento: 0.011818529510249694
+Pérdida de entrenamiento: 0.008588632261380553
 
-Pérdida de validación: 0.012096901498734951
-
-# Configuración 3
-
-```json
-{
-    "id": 3,
-    "learning_rate": 0.001,
-    "dropout": 0.2,
-    "l_size": 512,
-    "batch_size": 100,
-    "epochs": 30,
-    "lineal": true
-}
-```
-
-![](./configuracion3.png)
-
-Pérdida de entrenamiento incorrecto: 0.010617810577775041
-
-Pérdida de entrenamiento: 0.009333295960289737
-
-Pérdida de validación: 0.009662879910320044
+Pérdida de validación: 0.00894775432534516
 
 # Configuración 4
 
@@ -71,40 +49,18 @@ Pérdida de validación: 0.009662879910320044
     "id": 4,
     "learning_rate": 0.001,
     "dropout": 0.2,
-    "l_size": 1024,
+    "l_size": 128,
     "batch_size": 100,
-    "epochs": 30,
-    "lineal": true
+    "epochs": 60,
+    "lineal": false
 }
 ```
 
 ![](./configuracion4.png)
 
-Pérdida de entrenamiento incorrecto: 0.009367029801942407
+Pérdida de entrenamiento incorrecto: 0.005129455793648958
 
-Pérdida de entrenamiento: 0.008343576542101801
+Pérdida de entrenamiento: 0.005741913962798814
 
-Pérdida de validación: 0.00869848182424903
-
-# Configuración 5
-
-```json
-{
-    "id": 5,
-    "learning_rate": 0.001,
-    "dropout": 0.2,
-    "l_size": 128,
-    "batch_size": 100,
-    "epochs": 30,
-    "lineal": false
-}
-```
-
-![](./configuracion5.png)
-
-Pérdida de entrenamiento incorrecto: 0.005237580896355212
-
-Pérdida de entrenamiento: 0.006770576060904811
-
-Pérdida de validación: 0.0067911753756925465
+Pérdida de validación: 0.005772777325473726
 
