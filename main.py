@@ -72,7 +72,7 @@ results = trainer.train_all()
 base_model = autoencoder.Autoencoder(dropout=0.2, l_size=1024)
 
 best_model = autoencoder.Autoencoder(dropout=0.2, l_size=1024)
-best_model.load_state_dict(torch.load("./results/model_3.pth", map_location=torch.device('cpu'), weights_only=True))
+best_model.load_state_dict(torch.load("./results/model_3.pt", map_location=torch.device('cpu'), weights_only=True))
 
 """ 
 Entreno 3 clasificadores
@@ -81,15 +81,15 @@ Entreno 3 clasificadores
 3: Encoder con pre-entrenamiento, entreno solo la última capa
 """
 classifiers = [
-    Classifier(autoencoder=base_model, num_classes=10), # 1
-    Classifier(autoencoder=best_model, num_classes=10), # 2
-    Classifier(autoencoder=best_model, num_classes=10)  # 3
+    #Classifier(autoencoder=best_model, num_classes=10),  # 3
+    #Classifier(autoencoder=best_model, num_classes=10), # 2
+    Classifier(autoencoder=base_model, num_classes=10) # 1
 ]
 
 optimizers = [
-    torch.optim.Adam(classifiers[0].parameters(), lr=0.001),
-    torch.optim.Adam(classifiers[1].parameters(), lr=0.001),
-    torch.optim.Adam(classifiers[2].classifier.parameters(), lr=0.001)
+    #torch.optim.Adam(classifiers[0].classifier.parameters(), lr=0.001),
+    #torch.optim.Adam(classifiers[1].parameters(), lr=0.001),
+    torch.optim.Adam(classifiers[0].parameters(), lr=0.001)
 ]
 
 criterion = torch.nn.CrossEntropyLoss()

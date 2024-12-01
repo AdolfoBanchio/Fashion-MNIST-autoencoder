@@ -9,7 +9,10 @@ class Classifier(nn.Module):
         self.dropout = autoencoder.dropout
 
         self.encoder = copy.deepcopy(autoencoder.encoder)
-        self.classifier = nn.Linear(self.l_size, num_classes)  # encoder[-3] es la capa lineal del encoder
+        self.classifier = nn.Sequential(
+            nn.Linear(self.l_size, num_classes),
+            nn.Sigmoid()
+            )  # encoder[-3] es la capa lineal del encoder
 
     def forward(self, x):
         x = self.encoder(x)
