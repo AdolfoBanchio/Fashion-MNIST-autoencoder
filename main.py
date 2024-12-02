@@ -6,6 +6,7 @@ from torchvision import datasets, transforms
 from classifier import Classifier
 from classifier_trainer import ClassifierTrainer
 import matplotlib.pyplot as plt
+from autoencoder_trainer import TrainingManager, AutoencoderTrainer
 
 """ 
     {

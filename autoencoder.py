@@ -25,11 +25,11 @@ class Autoencoder(nn.Module):
         self.encoder = nn.Sequential(
             nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1),  # (1, 28, 28) -> (32, 28, 28)
             nn.ReLU(),
-            nn.Dropout(0.2),
+            nn.Dropout(dropout),
             nn.MaxPool2d(kernel_size=2, stride=2),  # (32, 28, 28) -> (32, 14, 14)
             nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),  # (32, 14, 14) -> (64, 14, 14)
             nn.ReLU(),
-            nn.Dropout(0.2),
+            nn.Dropout(dropout),
             nn.MaxPool2d(kernel_size=2, stride=2) , # (64, 14, 14) -> (64, 7, 7)
             # capa lineal
             nn.Flatten(),

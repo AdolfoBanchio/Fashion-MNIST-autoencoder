@@ -15,6 +15,7 @@ class AutoencoderTrainer:
       self.criterion = criterion
       self.epochs = epochs
       self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+      self.model.to(self.device)
 
       self.train_loss_incorrect = []
       self.train_loss = []
@@ -23,7 +24,6 @@ class AutoencoderTrainer:
     def train_loop(self):
       self.model.train()
       running_loss = 0
-
       for batch_number, (images, labels) in enumerate(self.train_loader):
 
         images = images.to(self.device)
