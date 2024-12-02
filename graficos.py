@@ -38,7 +38,7 @@ def read_results():
             md_file.write(f'```json\n')
             md_file.write(json.dumps(config, indent=4))
             md_file.write(f'\n```\n\n')
-            md_file.write(f'![](./configuracion{id}.png)\n\n')
+            md_file.write(f'![](./configuracion%20{id}.png)\n\n')
             # wirte last values of the losses
             md_file.write(f'Pérdida de entrenamiento incorrecto: {train_loss_inc[-1]}\n\n')
             md_file.write(f'Pérdida de entrenamiento: {train_loss[-1]}\n\n')

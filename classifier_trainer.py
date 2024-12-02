@@ -15,6 +15,7 @@ class ClassifierTrainer:
         self.criterion = criterion
         self.epochs = epochs
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model.to(self.device)
 
         self.train_loss_incorrect = []
         self.train_loss = []

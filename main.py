@@ -90,7 +90,7 @@ classifiers = [
 optimizers = [
     torch.optim.Adam(classifiers[0].classifier.parameters(), lr=0.001),
     torch.optim.Adam(classifiers[1].parameters(), lr=0.001),
-    torch.optim.Adam(classifiers[0].parameters(), lr=0.001)
+    torch.optim.Adam(classifiers[2].parameters(), lr=0.001)
 ]
 
 criterion = torch.nn.CrossEntropyLoss()
