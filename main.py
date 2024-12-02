@@ -1,12 +1,12 @@
 import autoencoder
-import autoencoder_trainer
 import os
 import json
 import torch
 from torchvision import datasets, transforms  
-from autoencoder_trainer import AutoencoderTrainer, TrainingManager
 from classifier import Classifier
 from classifier_trainer import ClassifierTrainer
+import matplotlib.pyplot as plt
+
 """ 
     {
         "id": 1,
@@ -81,14 +81,14 @@ Entreno 3 clasificadores
 3: Encoder sin pre-entrenamiento
 """
 classifiers = [
-    #Classifier(autoencoder=best_model, num_classes=10),  # 1
-    #Classifier(autoencoder=best_model, num_classes=10), # 2
+    Classifier(autoencoder=best_model, num_classes=10),  # 1
+    Classifier(autoencoder=best_model, num_classes=10), # 2
     Classifier(autoencoder=base_model, num_classes=10) # 3
 ]
 
 optimizers = [
-    #torch.optim.Adam(classifiers[0].classifier.parameters(), lr=0.001),
-    #torch.optim.Adam(classifiers[1].parameters(), lr=0.001),
+    torch.optim.Adam(classifiers[0].classifier.parameters(), lr=0.001),
+    torch.optim.Adam(classifiers[1].parameters(), lr=0.001),
     torch.optim.Adam(classifiers[0].parameters(), lr=0.001)
 ]
 
@@ -106,6 +106,7 @@ for i,(classifier, optimizer) in enumerate(zip(classifiers, optimizers)):
     torch.save(classifier.state_dict(), f"./results/classifier_{i+1}.pth")
     with open(f"./results/classifier_{i+1}_results.json", "w") as f:
         json.dump({
+            "id": i+1,
             "train_loss_incorrect": trainer.train_loss_incorrect,
             "train_loss": trainer.train_loss,
             "valid_loss": trainer.valid_loss,
@@ -113,3 +114,25 @@ for i,(classifier, optimizer) in enumerate(zip(classifiers, optimizers)):
             "train_precision": trainer.train_precision,
             "valid_precision": trainer.valid_precision
         }, f)
+        fig = plt.figure(figsize=(10,10))
+        gs = fig.add_gridspec(2, hspace=0)
+        ax = gs.subplots(sharex=True)
+
+        ax[0].plot(trainer.train_loss_inc, label='Train Loss Incorrect')
+        ax[0].plot(trainer.train_loss, label='Train Loss', linestyle='--')
+        ax[0].plot(trainer.valid_loss, label='Validation Loss', linestyle='-.')
+        ax[0].set_ylabel('Loss')
+        ax[0].legend()
+        ax[0].grid()
+
+        ax[1].plot(trainer.train_prec_inc, label='Train Precision Incorrect')
+        ax[1].plot(trainer.train_prec, label='Train Precision', linestyle='--')
+        ax[1].plot(trainer.valid_prec, label='Validation Precision', linestyle='-.')
+        ax[1].set_ylabel('Precision')
+        ax[1].set_xlabel('Epoch')
+        ax[1].legend()
+        ax[1].grid()
+
+        fig.tight_layout()
+        fig.savefig(f"./results/classifier_{i+1}_results.png")
+        plt.close(fig)
