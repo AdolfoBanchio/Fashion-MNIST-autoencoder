@@ -12,10 +12,10 @@ def save_plot(conf,train_loss_in,train_loss,valid_loss, name):
     plt.plot(train_loss, label='train_loss', linestyle='--')
     plt.plot(valid_loss, label='valid_loss', linestyle='-.')
     plt.grid()
-    plt.title(name)
+    #plt.title(name)
     plt.legend()
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
+    plt.xlabel('Epoch', fontsize=15)
+    plt.ylabel('Loss', fontsize=15)
     plt.savefig(f'./results/{name}.png')
     plt.close()
 
