@@ -12,7 +12,7 @@
 }
 ```
 
-![](./configuracion1.png)
+![](./configuracion%201.png)
 
 Pérdida de entrenamiento incorrecto: 0.017255655922926962
 
@@ -34,7 +34,7 @@ Pérdida de validación: 0.02221326269209385
 }
 ```
 
-![](./configuracion2.png)
+![](./configuracion%202.png)
 
 Pérdida de entrenamiento incorrecto: 0.010286848434867959
 
@@ -56,7 +56,7 @@ Pérdida de validación: 0.00894775432534516
 }
 ```
 
-![](./configuracion3.png)
+![](./configuracion%203.png)
 
 Pérdida de entrenamiento incorrecto: 0.008950487502540152
 
@@ -78,7 +78,7 @@ Pérdida de validación: 0.008079061871394516
 }
 ```
 
-![](./configuracion4.png)
+![](./configuracion%204.png)
 
 Pérdida de entrenamiento incorrecto: 0.005129455793648958
 
